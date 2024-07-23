@@ -7,6 +7,9 @@ Parking Finder Berlin is a Progressive Web App (PWA) designed to help users find
   <img src="https://github.com/user-attachments/assets/ae774137-0817-4691-8aec-bd8f9f4a0ee0" width="250px" />
 </p>
 
+## Demo. Make sure to start backend server first.
+1. [Front-end demo](https://pacific-cove-71889-f44426dfeaf4.herokuapp.com/).
+2. [Back-end server](https://sleepy-basin-25742-c216d1d4896e.herokuapp.com/).
 
 ## Features
 
