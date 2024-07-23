@@ -4,6 +4,7 @@ import ShareIcon from '@mui/icons-material/ShareOutlined';
 const ShareButton = () => {
   const theme = useTheme();
   const isTablet = useMediaQuery(theme.breakpoints.up('sm'));
+  const isShareAvailable = !!navigator.share;
 
   const handleClick = () => {
     navigator.share({
@@ -12,6 +13,10 @@ const ShareButton = () => {
       text: 'Join the app!',
     });
   };
+
+  if (!isShareAvailable) {
+    return null;
+  }
 
   if (isTablet) {
     return (
