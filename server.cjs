@@ -1,12 +1,12 @@
-import express from 'express';
-import path from 'path';
+const express = require('express');
+const path = require('path');
 
 const app = express();
 // eslint-disable-next-line no-undef
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5173;
 
 // eslint-disable-next-line no-undef
-app.use(express.static(path.join(__dirname, '..', 'dist')));
+app.use(express.static(path.join(__dirname, 'dist')));
 
 app.get('*', (req, res) => {
   // eslint-disable-next-line no-undef

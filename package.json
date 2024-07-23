@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css}\"",
     "generate-pwa-assets": "pwa-assets-generator",
-    "serve:prod": "node server.js"
+    "serve:prod": "node server.cjs"
   },
   "dependencies": {
     "@emotion/react": "^11.13.0",
