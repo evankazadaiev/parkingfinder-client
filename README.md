@@ -22,7 +22,7 @@ Parking Finder Berlin is a Progressive Web App (PWA) designed to help users find
 
 ## Installation
 
-To set up the project locally, follow these steps:
+The instructions below will help you set up the development environment:
 
  ### Cloning repository
 
