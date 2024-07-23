@@ -1,0 +1,7 @@
+@media (prefers-color-scheme: dark) {
+    .map-container {
+        .leaflet-layer, .leaflet-control-zoom-in, .leaflet-control-zoom-out, .leaflet-control-attribution {
+            filter: invert(100%) hue-rotate(180deg);
+        }
+    }
+}
