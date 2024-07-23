@@ -7,47 +7,76 @@ import * as path from 'path';
 const PWA_PLUGIN_OPTIONS: Partial<VitePWAOptions> = {
   registerType: 'autoUpdate',
   injectRegister: false,
-  includeAssets: ['favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
+
+  pwaAssets: {
+    disabled: false,
+    config: true,
+  },
 
   manifest: {
     name: 'Berlin Parking Finder - Simplified parking search experience',
     short_name: 'Parking Finder',
-    description: 'Simplified parking search experience',
+    description: 'Get the best parking search experience from our app!',
     theme_color: '#ffffff',
     scope: '/',
     start_url: '/',
     icons: [
       {
-        src: '/pwa-192x192.png',
-        sizes: '192x192',
+        src: '/icons/pwa-64x64.png',
+        sizes: '64x64',
         type: 'image/png',
-        purpose: 'any',
       },
       {
-        src: '/pwa-512x512.png',
+        src: '/icons/pwa-192x192.png',
+        sizes: '192x192',
+        type: 'image/png',
+      },
+      {
+        src: '/icons/pwa-512x512.png',
         sizes: '512x512',
         type: 'image/png',
-        purpose: 'any',
       },
       {
-        src: '/pwa-maskable-192x192.png',
-        sizes: '192x192',
-        type: 'image/png',
-        purpose: 'maskable',
-      },
-      {
-        src: '/pwa-maskable-512x512.png',
+        src: '/icons/maskable-icon-512x512.png',
         sizes: '512x512',
         type: 'image/png',
         purpose: 'maskable',
       },
     ],
+    screenshots: [
+      {
+        src: '/screenshots/screenshot-main.png',
+        sizes: '768x1280',
+        type: 'image/png',
+        form_factor: 'wide',
+      },
+      {
+        src: '/screenshots/screenshot-secondary.png',
+        sizes: '768x1280',
+        type: 'image/png',
+        form_factor: 'wide',
+      },
+    ],
   },
 
   workbox: {
-    globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
+    globPatterns: ['**/*.{ts,js,css,html,ico,png,svg,woff,woff2}'],
     // API CACHING
     runtimeCaching: [
+      {
+        urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
+        handler: 'CacheFirst',
+        options: {
+          cacheName: 'google-fonts-cache',
+          expiration: {
+            maxEntries: 10,
+            maxAgeSeconds: 60 * 60 * 24 * 365, // <== 365 days
+          },
+          cacheableResponse: {
+            statuses: [0, 200],
+          },
+        },
+      },
       // MAP CHUNKS CACHING
       {
         urlPattern: /^https:\/\/{s}.tile.openstreetmap.org\/{z}\/{x}\/{y}.png$/,
@@ -63,7 +92,7 @@ const PWA_PLUGIN_OPTIONS: Partial<VitePWAOptions> = {
       // API CACHING
       {
         urlPattern: ({ url }) => {
-          return url.pathname.startsWith('/api');
+          return url.pathname.includes('/api');
         },
         handler: 'NetworkFirst',
         options: {
@@ -80,64 +109,14 @@ const PWA_PLUGIN_OPTIONS: Partial<VitePWAOptions> = {
   },
 };
 
-const MANUAL_PWA_PLUGIN_OPTIONS = {
-  devOptions: {
-    enabled: true,
-  },
-  includeAssets: ['favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
-  strategies: 'injectManifest',
-  srcDir: './src',
-  filename: 'service-worker.ts',
-  registerType: 'autoUpdate',
-  injectManifest: {
-    swDest: 'dist/service-worker.ts',
-  },
-
-  manifest: {
-    name: 'Berlin Parking Finder - Simplified parking search experience',
-    short_name: 'Parking Finder',
-    description: 'Simplified parking search experience',
-    theme_color: '#ffffff', // Change later on
-    scope: '/',
-    start_url: '/',
-    icons: [
-      {
-        src: '/pwa-192x192.png',
-        sizes: '192x192',
-        type: 'image/png',
-        purpose: 'any',
-      },
-      {
-        src: '/pwa-512x512.png',
-        sizes: '512x512',
-        type: 'image/png',
-        purpose: 'any',
-      },
-      {
-        src: '/pwa-maskable-192x192.png',
-        sizes: '192x192',
-        type: 'image/png',
-        purpose: 'maskable',
-      },
-      {
-        src: '/pwa-maskable-512x512.png',
-        sizes: '512x512',
-        type: 'image/png',
-        purpose: 'maskable',
-      },
-    ],
-  },
-};
-
 export default defineConfig({
   plugins: [
     react(),
     eslintPlugin({
       cache: false,
-      include: ['./src/**/*.js', './src/**/*.jsx'],
+      include: ['./src/**/*.ts', './src/**/*.tsx'],
       exclude: [],
     }),
-    // VitePWA(MANUAL_PWA_PLUGIN_OPTIONS),
     VitePWA(PWA_PLUGIN_OPTIONS),
   ],
   resolve: {

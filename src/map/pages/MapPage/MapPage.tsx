@@ -7,6 +7,7 @@ import { MapContainer } from 'react-leaflet';
 import { SharedMapProvider } from '@/map/context';
 import { AppBar, Toolbar, Typography } from '@mui/material';
 import InstallPWAButton from '@/common/components/InstallPWAButton/InstallPWAButton.tsx';
+import ShareButton from '@/common/components/ShareButton/ShareButton.tsx';
 const BERLIN_COORDINATES = { lat: 52.520008, lng: 13.404954 };
 
 const MapPage = () => {
@@ -17,9 +18,10 @@ const MapPage = () => {
       <SharedMapProvider>
         <AppBar position="static">
           <Toolbar>
-            <Typography variant="h6">Parking Finder</Typography>
+            <Typography variant="h6">Parkfinder</Typography>
             <Box sx={{ flexGrow: 1 }} />
             <InstallPWAButton />
+            <ShareButton />
           </Toolbar>
         </AppBar>
         <MapContainer

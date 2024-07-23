@@ -1,9 +1,12 @@
 import { MouseEvent, useEffect, useState } from 'react';
-import { Button } from '@mui/material';
+import { Button, IconButton, useMediaQuery, useTheme } from '@mui/material';
+import InstallIcon from '@mui/icons-material/InstallMobile';
 
 const InstallPwaButton = () => {
   const [supportsPWA, setSupportsPWA] = useState(false);
   const [promptInstall, setPromptInstall] = useState<BeforeInstallPromptEvent | null>(null);
+  const theme = useTheme();
+  const isTablet = useMediaQuery(theme.breakpoints.up('sm'));
 
   useEffect(() => {
     const handler = (e: BeforeInstallPromptEvent) => {
@@ -12,6 +15,7 @@ const InstallPwaButton = () => {
       setSupportsPWA(true);
       setPromptInstall(e);
     };
+
     window.addEventListener('beforeinstallprompt', handler);
 
     // @ts-ignore
@@ -30,15 +34,28 @@ const InstallPwaButton = () => {
     return null;
   }
 
+  if (isTablet) {
+    return (
+      <Button
+        onClick={handleClick}
+        sx={{ mx: 2, color: 'white', borderColor: 'white', display: 'block' }}
+        variant="outlined"
+        id="install-app-button"
+      >
+        Install App
+      </Button>
+    );
+  }
+
   return (
-    <Button
+    <IconButton
       onClick={handleClick}
-      sx={{ my: 2, color: 'white', borderColor: 'white', display: 'block' }}
-      variant="outlined"
+      size="large"
+      sx={{ color: 'white', borderColor: 'white', display: 'block' }}
       id="install-app-button"
     >
-      Install App
-    </Button>
+      <InstallIcon />
+    </IconButton>
   );
 };
 
