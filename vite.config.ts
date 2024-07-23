@@ -63,20 +63,6 @@ const PWA_PLUGIN_OPTIONS: Partial<VitePWAOptions> = {
     globPatterns: ['**/*.{ts,js,css,html,ico,png,svg,woff,woff2}'],
     // API CACHING
     runtimeCaching: [
-      {
-        urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-        handler: 'CacheFirst',
-        options: {
-          cacheName: 'google-fonts-cache',
-          expiration: {
-            maxEntries: 10,
-            maxAgeSeconds: 60 * 60 * 24 * 365, // <== 365 days
-          },
-          cacheableResponse: {
-            statuses: [0, 200],
-          },
-        },
-      },
       // MAP CHUNKS CACHING
       {
         urlPattern: /^https:\/\/{s}.tile.openstreetmap.org\/{z}\/{x}\/{y}.png$/,
@@ -84,21 +70,21 @@ const PWA_PLUGIN_OPTIONS: Partial<VitePWAOptions> = {
         options: {
           cacheName: 'osm-tiles',
           expiration: {
-            maxEntries: 100,
+            maxEntries: 120,
             maxAgeSeconds: 10 * 24 * 60 * 60,
           },
         },
       },
       // API CACHING
       {
-        urlPattern: ({ url }) => {
-          return url.pathname.includes('/api');
+        urlPattern: ({ url, ...rest }) => {
+          return url.href.includes(import.meta.env.VITE_APP_API_URL);
         },
         handler: 'NetworkFirst',
         options: {
           cacheName: 'api-cache',
           cacheableResponse: {
-            statuses: [0, 201],
+            statuses: [0, 200],
           },
         },
       },
