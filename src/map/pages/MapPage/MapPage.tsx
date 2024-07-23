@@ -8,10 +8,26 @@ import { SharedMapProvider } from '@/map/context';
 import { AppBar, Toolbar, Typography } from '@mui/material';
 import InstallPWAButton from '@/common/components/InstallPWAButton/InstallPWAButton.tsx';
 import ShareButton from '@/common/components/ShareButton/ShareButton.tsx';
+import { useRegisterSW } from 'virtual:pwa-register/react';
+
 const BERLIN_COORDINATES = { lat: 52.520008, lng: 13.404954 };
 
 const MapPage = () => {
-  const [parkings] = useParkings();
+  const intervalMS = 60 * 60 * 1000;
+
+  const {
+    needRefresh: [needRefresh],
+    offlineReady: [offlineReady],
+  } = useRegisterSW({
+    onRegistered(r) {
+      r &&
+        setInterval(() => {
+          r.update();
+        }, intervalMS);
+    },
+  });
+
+  const [parkings] = useParkings(needRefresh || offlineReady);
 
   return (
     <Box className="map-page">
