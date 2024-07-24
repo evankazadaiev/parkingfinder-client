@@ -18,7 +18,6 @@ export default defineConfig(({ mode }) => {
       VitePWA({
         registerType: 'autoUpdate',
         injectRegister: false,
-        mode: 'development',
 
         manifest: {
           name: 'Berlin Parking Finder - Simplified parking search experience',

@@ -8,7 +8,6 @@ import { useSharedMap } from '@/map/context';
 import { Divider, Typography } from '@mui/material';
 import { navigationIconMap } from '@/common/constants';
 import 'leaflet/dist/leaflet.css';
-import './ParkingsMap.scss';
 
 interface IParkingsMapContainerProps {
   parkings: CarParking[];
