@@ -9,10 +9,12 @@ import { AppBar, Toolbar, Typography } from '@mui/material';
 import InstallPWAButton from '@/common/components/InstallPWAButton/InstallPWAButton.tsx';
 import ShareButton from '@/common/components/ShareButton/ShareButton.tsx';
 import { useRegisterSW } from 'virtual:pwa-register/react';
+import { useEffect, useRef } from 'react';
 
 const BERLIN_COORDINATES = { lat: 52.520008, lng: 13.404954 };
 
 const MapPage = () => {
+  const intervalRef = useRef<NodeJS.Timeout>();
   const intervalMS = 60 * 60 * 1000;
 
   const {
@@ -20,12 +22,21 @@ const MapPage = () => {
     offlineReady: [offlineReady],
   } = useRegisterSW({
     onRegistered(r) {
-      r &&
-        setInterval(() => {
+      if (r) {
+        intervalRef.current = setInterval(() => {
           r.update();
         }, intervalMS);
+      }
     },
   });
+
+  useEffect(() => {
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, []);
 
   const [parkings] = useParkings(needRefresh || offlineReady);
 

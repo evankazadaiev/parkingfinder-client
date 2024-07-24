@@ -95,7 +95,7 @@ export default defineConfig(({ mode }) => {
               options: {
                 cacheName: 'api-cache',
                 cacheableResponse: {
-                  statuses: [0, 200],
+                  statuses: [200],
                 },
               },
             },
