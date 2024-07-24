@@ -7,7 +7,6 @@ export const useParkings = (needRefresh: boolean) => {
 
   useEffect(() => {
     (async () => {
-      console.log('UPDATE >>> REFRESHING DATA');
       const res = await fetchParkings();
 
       setParkings(res);

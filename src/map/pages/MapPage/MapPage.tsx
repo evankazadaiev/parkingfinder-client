@@ -5,7 +5,7 @@ import { useParkings } from '@/map/hooks';
 import { LatLngExpression } from 'leaflet';
 import { MapContainer } from 'react-leaflet';
 import { SharedMapProvider } from '@/map/context';
-import { AppBar, Toolbar, Typography } from '@mui/material';
+import { AppBar, Button, Snackbar, Toolbar, Typography } from '@mui/material';
 import InstallPWAButton from '@/common/components/InstallPWAButton/InstallPWAButton.tsx';
 import ShareButton from '@/common/components/ShareButton/ShareButton.tsx';
 import { useRegisterSW } from 'virtual:pwa-register/react';
@@ -18,15 +18,20 @@ const MapPage = () => {
   const intervalMS = 60 * 60 * 1000;
 
   const {
-    needRefresh: [needRefresh],
+    needRefresh: [needRefresh, setNeedRefresh],
     offlineReady: [offlineReady],
+    updateServiceWorker,
   } = useRegisterSW({
     onRegistered(r) {
       if (r) {
+        console.log('SW Registered: ' + r);
         intervalRef.current = setInterval(() => {
           r.update();
         }, intervalMS);
       }
+    },
+    onRegisterError(error) {
+      console.log('SW registration error', error);
     },
   });
 
@@ -37,6 +42,13 @@ const MapPage = () => {
       }
     };
   }, []);
+
+  const closePrompt = () => {
+    setNeedRefresh(false);
+  };
+  const handleSWUpdate = () => {
+    updateServiceWorker(true);
+  };
 
   const [parkings] = useParkings(needRefresh || offlineReady);
 
@@ -63,6 +75,18 @@ const MapPage = () => {
 
         <ParkingsTable parkings={parkings} />
       </SharedMapProvider>
+      <Snackbar
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        open={needRefresh}
+        onClose={closePrompt}
+        message="New content available, click on reload button to update."
+        action={
+          <>
+            <Button onClick={handleSWUpdate}>Reload</Button>
+            <Button onClick={closePrompt}>Close</Button>
+          </>
+        }
+      />
     </Box>
   );
 };

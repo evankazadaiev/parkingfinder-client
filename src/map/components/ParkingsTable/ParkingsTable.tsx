@@ -27,7 +27,7 @@ const ParkingsTable = ({ parkings }: IParkingsTableProps) => {
   };
 
   return (
-    <Box sx={{ position: 'relative', zIndex: 100 }} id="table-container">
+    <Box id="table-container">
       <DenseTable onLocationClick={handleLocationClick} parkings={parkings} />
     </Box>
   );
