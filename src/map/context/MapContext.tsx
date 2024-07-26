@@ -3,19 +3,17 @@ import type { Map } from 'leaflet';
 
 interface ISharedMapContext {
   setMapInstance: (value: ((prevState: Map) => Map) | Map) => void;
-  mapInstance: Map;
+  mapInstance: Map | null;
 }
 
-// @ts-ignore
-export const SharedMapContext = createContext<ISharedMapContext>({});
+export const SharedMapContext = createContext<ISharedMapContext | null>(null);
 
 interface ISharedMapProviderProps {
   children: React.ReactElement | React.ReactElement[];
 }
 
 export const SharedMapProvider = ({ children }: ISharedMapProviderProps) => {
-  // @ts-ignore
-  const [mapInstance, setMapInstance] = useState<Map>({});
+  const [mapInstance, setMapInstance] = useState<Map | null>(null);
 
   return (
     <SharedMapContext.Provider
